@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph.xml"
+    app:startDestination="@id/Top250Fragment">
+
+    <fragment
+        android:id="@+id/Top250Fragment"
+        android:name="com.example.fulljson10.Top250Fragment"
+        android:label="Список Фильмов"
+        tools:layout="@layout/fragment_top250">
+
+        <action
+            android:id="@+id/action_Top250Fragment_to_filmFullTitle"
+            app:destination="@id/filmFullTitle" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/filmFullTitle"
+        android:label="Подробно"
+        android:name="com.example.fulljson10.FullTitleFragment"
+        tools:layout="@layout/fragment_full_title">
+
+        <action
+            android:id="@+id/action_filmFullTitle_to_Top250Fragment"
+            app:destination="@id/Top250Fragment" />
+        <action
+            android:id="@+id/action_filmFullTitle_to_actorsViewPagerFragment"
+            app:destination="@id/actorsViewPagerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/actorsViewPagerFragment"
+        android:name="com.example.fulljson10.ActorsViewPagerFragment"
+        android:label="fragment_actors_view_pager"
+        tools:layout="@layout/fragment_actors_view_pager" />
+
+</navigation>

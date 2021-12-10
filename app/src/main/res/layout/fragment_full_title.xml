@@ -1,0 +1,153 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/TitleConstraint"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/TitleTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textColor="@color/BoldBlack"
+        android:textSize="26sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/TitlePoster"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="88888888888888888888888" />
+
+    <ImageView
+        android:id="@+id/TitlePoster"
+        android:layout_width="150dp"
+        android:layout_height="200dp"
+        android:layout_margin="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/TitleTitle" />
+
+    <TextView
+
+        android:id="@+id/TitleRating"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/TitlePoster"
+        app:layout_constraintTop_toBottomOf="@id/TitleTitle"
+        app:layout_constraintBottom_toBottomOf="@id/TitlePopular"
+        tools:text="88888888888888888888888" />
+    <!--Metascore Rating-->
+    <TextView
+        android:id="@+id/TitlePopular"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/TitleGenre"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/TitlePoster"
+        app:layout_constraintTop_toBottomOf="@id/TitleRating"
+        tools:text="88888888888888888888888" />
+
+
+    <TextView
+        android:id="@+id/TitleGenre"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/TitleYear"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/TitlePoster"
+        app:layout_constraintTop_toBottomOf="@id/TitlePopular"
+        tools:text="88888888888888888888888" />
+
+
+
+
+    <TextView
+        android:id="@+id/TitleYear"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/TitleDirector"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/TitlePoster"
+        app:layout_constraintTop_toBottomOf="@id/TitleGenre"
+        tools:text="88888888888888888888888" />
+
+
+    <TextView
+        android:id="@+id/TitleDirector"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/TitlePoster"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/TitleYear"
+        app:layout_constraintBottom_toTopOf="@id/TitleStars"
+        tools:text="88888888888888888888888" />
+
+    <TextView
+        android:id="@+id/TitleStars"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/TitleDirector"
+        app:layout_constraintStart_toEndOf="@id/TitlePoster"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/TitleRecicle"
+        tools:text="88888888888888888888888" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/TitleRecicle"
+        android:layout_width="0dp"
+        android:layout_height="170dp"
+        android:layout_margin="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TitlePoster"
+        app:layout_constraintBottom_toTopOf="@id/ConstraintVP"/>
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/ConstraintVP"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_constraintTop_toBottomOf="@id/TitleRecicle"
+    app:layout_constraintBottom_toBottomOf="parent">
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/TitleTabLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:tabIndicatorHeight="4dp"
+        app:tabIndicatorColor="@color/FiolLight"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/TitleViewPager"/>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/TitleViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        app:layout_constraintTop_toBottomOf="@id/TitleTabLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

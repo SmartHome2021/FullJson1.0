@@ -1,0 +1,68 @@
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardElevation="20dp"
+    app:strokeColor="@color/CardStroke"
+    app:strokeWidth="1dp"
+    app:cardBackgroundColor="@color/CardGray"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="15dp"
+    android:id="@+id/FilmCard">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="170dp">
+
+
+        <ImageView
+            android:id="@+id/ActorImage"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:layout_margin="3dp"
+            tools:src="@color/BoldBlack"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+
+        <TextView
+            android:id="@+id/ActorName"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="5dp"
+            android:gravity="center_vertical"
+            android:textAlignment="gravity"
+            android:textColor="@color/BoldBlack"
+            android:textStyle="bold"
+            android:textSize="17sp"
+            tools:text="Leonardo Dikaprio"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ActorImage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/ActorRole"/>
+
+
+        <TextView
+            android:id="@+id/ActorRole"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="5dp"
+            android:gravity="center_vertical"
+            android:textAlignment="gravity"
+            android:textColor="@color/BoldBlack"
+            android:textStyle="bold"
+            android:textSize="17sp"
+            tools:text="Leonardo Dikaprio"
+            app:layout_constraintStart_toEndOf="@id/ActorImage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ActorName"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

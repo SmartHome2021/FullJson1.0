@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">IMDB Top 250</string>
+    <string name="Year">Год выпуска: </string>
+    <string name="Rating">Рейтинг IMDB: </string>
+    <string name="Count">Голосов: </string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="Actors">Hello blank fragment</string>
+    <string name="Description">Hello blank fragment</string>
+
+</resources>
