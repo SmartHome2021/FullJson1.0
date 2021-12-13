@@ -5,11 +5,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.fulljson10.R
 import com.example.fulljson10.adapter.MyMovieAdapter
 import com.example.fulljson10.common.Common
 import com.example.fulljson10.model.Film
@@ -18,6 +17,13 @@ import androidx.navigation.fragment.findNavController
 import com.example.fulljson10.adapter.OnFilmSelectListener
 import com.example.fulljson10.databinding.Top250RecicleBinding
 import com.example.fulljson10.retrofit.RetrofitServieces
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -63,30 +69,29 @@ class Top250Fragment : Fragment(), OnFilmSelectListener {
 
         rvFilms.layoutManager = layoutManager
 
-        getAllMovieList()
+        viewLifecycleOwner.lifecycleScope.launch {
+            getAllMovieList()
+        }
+
 
 
     }
 
 
-    private fun getAllMovieList() {
+    private suspend fun getAllMovieList() {
 
-        mService.getMovieList().enqueue(object : Callback<FilmResponse> {
+//        flowOf(1, 2, 3)
+//            .map { it * it }
+//            .collect { res -> print(res) }
 
-            override fun onFailure(call: Call<FilmResponse>, t: Throwable) {
-            }
-
-            override fun onResponse(call: Call<FilmResponse>, response: Response<FilmResponse>) {
-    Log.e("Response", "Top250")
-
-                val filmsResponse = response.body()
-
-                adapter = MyMovieAdapter(context!!, filmsResponse!!.items, this@Top250Fragment)
-
-                adapter.notifyDataSetChanged()
+        kotlin.runCatching { withContext(Dispatchers.IO) { mService.getMovieList() } }
+            .onSuccess { response ->
+                adapter  = MyMovieAdapter(requireContext(), response.items, this )
                 rvFilms.adapter = adapter
             }
-        })
+            .onFailure { e ->
+                Log.e("Response", e.message, e)
+            }
     }
 
     override fun onSelect(film: Film) {

@@ -1,6 +1,5 @@
 package com.example.fulljson10
 
-import Actor
 import TitleData
 import android.os.Bundle
 import android.util.Log
@@ -10,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -21,10 +20,13 @@ import com.example.fulljson10.common.Common
 import com.example.fulljson10.retrofit.RetrofitServieces
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.Serializable
 
 
 class FullTitleFragment : Fragment() {
@@ -52,7 +54,6 @@ class FullTitleFragment : Fragment() {
     //    lateinit var tvDescription: TextView
     lateinit var tvDirector: TextView
     lateinit var tvStars: TextView
-    lateinit var actData: TitleData
 
 
     override fun onCreateView(
@@ -88,50 +89,67 @@ class FullTitleFragment : Fragment() {
         tvDirector = view.findViewById(R.id.TitleDirector)
         tvStars = view.findViewById(R.id.TitleStars)
 
-
-        getAllMovieList()
-
-
-
+        viewLifecycleOwner.lifecycleScope.launch {
+            getAllMovieList()
+        }
 
 
     }
 
 
 
-    private fun getAllMovieList() {
-
-
+    suspend fun getAllMovieList() {
         val titleId = arguments?.getString("f") as String
-        mService.getTitleList(titleId).enqueue(object : Callback<TitleData> {
-            override fun onFailure(call: Call<TitleData>, t: Throwable) {
-            }
 
+        kotlin.runCatching { withContext(Dispatchers.Main){mService.getTitleList(titleId)} }
+            .onSuccess { response ->
 
-            override fun onResponse(call: Call<TitleData>, response: Response<TitleData>) {
-                Log.e("Response", "FullTitle")
-                val titlesResponse = response.body()
-                if (titlesResponse != null) {
-                    actData = titlesResponse
-                }
-                if (titlesResponse == null) {
-                    return
-                }
-                pagerAdapter = ViewPagerAdapter(this@FullTitleFragment, actData)
+                pagerAdapter = ViewPagerAdapter(this, response)
                 viewPager.adapter = pagerAdapter
                 TabLayoutMediator(tabLayout, viewPager) { tab, position ->
                     tab.text = tabNames[position]
                 }.attach()
 
-                ui(titlesResponse)
-
-                adapter = MyTitleAdapter(context!!, titlesResponse.images.items)
-                adapter.notifyDataSetChanged()
+                ui(response)
+                adapter = MyTitleAdapter(requireContext(), response.images.items)
                 rvFilms.adapter = adapter
 
             }
+            .onFailure { e ->
+                Log.e("Response", e.message, e)
+            }
 
-        })
+
+//        val titleId = arguments?.getString("f") as String
+//        mService.getTitleList(titleId).enqueue(object : Callback<TitleData> {
+//            override fun onFailure(call: Call<TitleData>, t: Throwable) {
+//            }
+//
+//
+//            override fun onResponse(call: Call<TitleData>, response: Response<TitleData>) {
+//                Log.e("Response", "FullTitle")
+//                val titlesResponse = response.body()
+//                if (titlesResponse != null) {
+//                    actData = titlesResponse
+//                }
+//                if (titlesResponse == null) {
+//                    return
+//                }
+//                pagerAdapter = ViewPagerAdapter(this@FullTitleFragment, actData)
+//                viewPager.adapter = pagerAdapter
+//                TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+//                    tab.text = tabNames[position]
+//                }.attach()
+//
+//                ui(titlesResponse)
+//
+//                adapter = MyTitleAdapter(context!!, titlesResponse.images.items)
+//                adapter.notifyDataSetChanged()
+//                rvFilms.adapter = adapter
+//
+//            }
+//
+//        })
     }
 
 
