@@ -5,7 +5,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +18,7 @@ import com.example.fulljson10.model.FilmResponse
 import androidx.navigation.fragment.findNavController
 import com.example.fulljson10.adapter.OnFilmSelectListener
 import com.example.fulljson10.databinding.Top250RecicleBinding
+import com.example.fulljson10.model.Top250Model
 import com.example.fulljson10.retrofit.RetrofitServieces
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -32,6 +35,8 @@ import java.util.*
 
 
 class Top250Fragment : Fragment(), OnFilmSelectListener {
+
+    private val viewModel250: Top250Model by viewModels()
 
     private var fragmentFirstBinding: Top250RecicleBinding? = null
     private val binding get() = fragmentFirstBinding!!
@@ -91,6 +96,7 @@ class Top250Fragment : Fragment(), OnFilmSelectListener {
             }
             .onFailure { e ->
                 Log.e("Response", e.message, e)
+                Toast.makeText(requireContext(), "Произошла Ошибка \n Данные не получены", Toast.LENGTH_LONG).show()
             }
     }
 

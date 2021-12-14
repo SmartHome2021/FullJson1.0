@@ -14,7 +14,7 @@ import com.example.fulljson10.model.Film
 
 class MyMovieAdapter(
     private val context: Context,
-    private val movieList: List<Film>,
+    private var movieList: List<Film>,
     private val listener: OnFilmSelectListener
 )
     : RecyclerView.Adapter<MyMovieAdapter.MyViewHolder>() {
@@ -55,6 +55,13 @@ class MyMovieAdapter(
     }
 
     override fun getItemCount() = movieList.size
+
+//    Уведомление адаптера о необходимости обновить данные
+    fun refreshData(movieList: List<Film>) {
+        this.movieList = movieList
+        notifyDataSetChanged()
+
+    }
 
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
