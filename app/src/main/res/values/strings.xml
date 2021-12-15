@@ -6,5 +6,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="Actors">Hello blank fragment</string>
     <string name="Description">Hello blank fragment</string>
+    <string name="itemsCount">Items downloaded: </string>
 
 </resources>

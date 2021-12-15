@@ -1,37 +1,49 @@
 package com.example.fulljson10.model
 
-import android.graphics.ColorSpace.get
-import android.service.autofill.UserData
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.fulljson10.retrofit.RetrofitClient
+import com.example.fulljson10.common.Common
 import com.example.fulljson10.retrofit.RetrofitServieces
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
-import retrofit2.Retrofit
 
 
-class Top250Model(private val retrofit: RetrofitServieces): ViewModel() {
+class Top250Model(): ViewModel() {
+    private var retrofit : RetrofitServieces = Common.retrofitService
 
-    val result250 = MutableStateFlow<List<Film>?>(null)
+
+    var result250 = MutableStateFlow<List<Film>?>(null)
+    var conterItem = 0
+
+
 
     init {
         viewModelScope.launch {
-            val result =  retrofit.getMovieList()
+            kotlin.runCatching { withContext(Dispatchers.IO) { retrofit.getMovieList() } }
 
-            this.coroutineContext:  = result
-//
-//            result250.emit(result)
+                .onSuccess {
+                    val result = retrofit.getMovieList()
+                    result250.value = result.items
+                    val test1 = result250.value
+                    if (test1 != null) {
+                        while (conterItem in test1.indices){
+                            conterItem++
 
+                        }
+                    }
+                }
+
+                .onFailure { e ->
+                    Log.e("Response", e.message, e)
+                }
         }
-        }
-
-    fun getFilm() = result250
-
-
-
     }
+}
+
+
+
+
+
 

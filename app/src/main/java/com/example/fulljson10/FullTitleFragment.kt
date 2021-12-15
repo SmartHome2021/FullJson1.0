@@ -90,7 +90,7 @@ class FullTitleFragment : Fragment() {
         tvStars = view.findViewById(R.id.TitleStars)
 
         viewLifecycleOwner.lifecycleScope.launch {
-            getAllMovieList()
+
         }
 
 
