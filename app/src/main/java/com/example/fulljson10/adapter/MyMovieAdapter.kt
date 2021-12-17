@@ -56,13 +56,6 @@ class MyMovieAdapter(
 
     override fun getItemCount() = movieList.size
 
-//    Уведомление адаптера о необходимости обновить данные
-    fun refreshData(movieList: List<Film>) {
-        this.movieList = movieList
-        notifyDataSetChanged()
-
-    }
-
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val listItem = movieList[position]

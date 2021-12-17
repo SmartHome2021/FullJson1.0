@@ -9,6 +9,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,20 +20,21 @@ import com.bumptech.glide.Glide
 import com.example.fulljson10.adapter.MyTitleAdapter
 import com.example.fulljson10.adapter.ViewPagerAdapter
 import com.example.fulljson10.common.Common
+import com.example.fulljson10.model.FullTitleViewModel
+import com.example.fulljson10.model.Top250ViewModel
 import com.example.fulljson10.retrofit.RetrofitServieces
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+
 
 
 class FullTitleFragment : Fragment() {
-
 
     lateinit var mService: RetrofitServieces
     lateinit var adapter: MyTitleAdapter
@@ -39,6 +43,7 @@ class FullTitleFragment : Fragment() {
     private lateinit var pagerAdapter: ViewPagerAdapter
     private lateinit var viewPager: ViewPager2
     private lateinit var tabLayout: TabLayout
+    private val viewModelFullTitle: FullTitleViewModel by viewModels()
     private val tabNames: Array<String> = arrayOf(
         "Actors",
         "Description"
@@ -61,15 +66,12 @@ class FullTitleFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_full_title, container, false)
+
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
-
-
         viewPager = view.findViewById(R.id.TitleViewPager)
         tabLayout = view.findViewById(R.id.TitleTabLayout)
         rvFilms = view.findViewById(R.id.TitleRecicle)
@@ -89,35 +91,72 @@ class FullTitleFragment : Fragment() {
         tvDirector = view.findViewById(R.id.TitleDirector)
         tvStars = view.findViewById(R.id.TitleStars)
 
-        viewLifecycleOwner.lifecycleScope.launch {
 
+
+        val titleId = arguments?.getString("f") as String
+
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModelFullTitle.resultFullTitle.collect {
+                if (it != null) {
+                    pagerAdapter = ViewPagerAdapter(this@FullTitleFragment, it)
+                    viewPager.adapter = pagerAdapter
+                    TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+                        tab.text = tabNames[position]
+                    }.attach()
+
+                    ui(it)
+
+                    adapter = MyTitleAdapter(requireContext(), it.images.items)
+                    rvFilms.adapter = adapter
+
+
+                }
+            }
         }
+        viewModelFullTitle.load(titleId)
+    }
+
+
+
+    private fun ui(titles: TitleData)
+    {
+
+        Glide.with(tvPoster.context).load(titles.image).into(tvPoster)
+        tvTitle.text = titles.title
+        tvRating.text = ("ImDb rating : ${titles.imDbRating}")
+        tvPopular.text = ("Metascore: ${titles.metacriticRating}")
+        tvGenre.text = ("Genre: ${titles.genres}")
+        tvYear.text = ("Year: ${titles.year}")
+//        tvDescription.text = ("Description:" + "\n" + titles.plot)
+        tvDirector.text = ("Director: " + titles.directors)
+        tvStars.text = ("Stars: " + titles.stars)
 
 
     }
 
 
 
-    suspend fun getAllMovieList() {
-        val titleId = arguments?.getString("f") as String
-
-        kotlin.runCatching { withContext(Dispatchers.Main){mService.getTitleList(titleId)} }
-            .onSuccess { response ->
-
-                pagerAdapter = ViewPagerAdapter(this, response)
-                viewPager.adapter = pagerAdapter
-                TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-                    tab.text = tabNames[position]
-                }.attach()
-
-                ui(response)
-                adapter = MyTitleAdapter(requireContext(), response.images.items)
-                rvFilms.adapter = adapter
-
-            }
-            .onFailure { e ->
-                Log.e("Response", e.message, e)
-            }
+//    suspend fun getAllMovieList() {
+//        val titleId = arguments?.getString("f") as String
+//
+//        kotlin.runCatching { withContext(Dispatchers.Main){mService.getTitleList(titleId)} }
+//            .onSuccess { response ->
+//
+//                pagerAdapter = ViewPagerAdapter(this, response)
+//                viewPager.adapter = pagerAdapter
+//                TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+//                    tab.text = tabNames[position]
+//                }.attach()
+//
+//                ui(response)
+//                adapter = MyTitleAdapter(requireContext(), response.images.items)
+//                rvFilms.adapter = adapter
+//
+//            }
+//            .onFailure { e ->
+//                Log.e("Response", e.message, e)
+//            }
 
 
 //        val titleId = arguments?.getString("f") as String
@@ -153,22 +192,8 @@ class FullTitleFragment : Fragment() {
     }
 
 
-    private fun ui(titles: TitleData)
-    {
-
-        Glide.with(tvPoster.context).load(titles.image).into(tvPoster)
-        tvTitle.text = titles.title
-        tvRating.text = ("ImDb rating : ${titles.imDbRating}")
-        tvPopular.text = ("Metascore: ${titles.metacriticRating}")
-        tvGenre.text = ("Genre: ${titles.genres}")
-        tvYear.text = ("Year: ${titles.year}")
-//        tvDescription.text = ("Description:" + "\n" + titles.plot)
-        tvDirector.text = ("Director: " + titles.directors)
-        tvStars.text = ("Stars: " + titles.stars)
 
 
-    }
-}
 
 
 
