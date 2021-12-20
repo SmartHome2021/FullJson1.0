@@ -2,7 +2,6 @@ package com.example.fulljson10
 
 import TitleData
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,8 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,18 +17,13 @@ import com.bumptech.glide.Glide
 import com.example.fulljson10.adapter.MyTitleAdapter
 import com.example.fulljson10.adapter.ViewPagerAdapter
 import com.example.fulljson10.common.Common
-import com.example.fulljson10.model.FullTitleViewModel
-import com.example.fulljson10.model.Top250ViewModel
+import com.example.fulljson10.viewmodel.FullTitleViewModel
 import com.example.fulljson10.retrofit.RetrofitServieces
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-
 
 
 class FullTitleFragment : Fragment() {
@@ -56,7 +48,6 @@ class FullTitleFragment : Fragment() {
     lateinit var tvPopular: TextView
     lateinit var tvGenre: TextView
     lateinit var tvYear: TextView
-    //    lateinit var tvDescription: TextView
     lateinit var tvDirector: TextView
     lateinit var tvStars: TextView
 
@@ -87,13 +78,12 @@ class FullTitleFragment : Fragment() {
         tvPopular = view.findViewById(R.id.TitlePopular)
         tvGenre = view.findViewById(R.id.TitleGenre)
         tvYear = view.findViewById(R.id.TitleYear)
-//        tvDescription = view.findViewById(R.id.TitleDescription)
         tvDirector = view.findViewById(R.id.TitleDirector)
         tvStars = view.findViewById(R.id.TitleStars)
 
 
 
-        val titleId = arguments?.getString("f") as String
+//        val titleId = arguments?.getString("f") as String
 
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -114,7 +104,7 @@ class FullTitleFragment : Fragment() {
                 }
             }
         }
-        viewModelFullTitle.load(titleId)
+//        viewModelFullTitle.load(titleId)
     }
 
 
@@ -135,61 +125,7 @@ class FullTitleFragment : Fragment() {
 
     }
 
-
-
-//    suspend fun getAllMovieList() {
-//        val titleId = arguments?.getString("f") as String
-//
-//        kotlin.runCatching { withContext(Dispatchers.Main){mService.getTitleList(titleId)} }
-//            .onSuccess { response ->
-//
-//                pagerAdapter = ViewPagerAdapter(this, response)
-//                viewPager.adapter = pagerAdapter
-//                TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-//                    tab.text = tabNames[position]
-//                }.attach()
-//
-//                ui(response)
-//                adapter = MyTitleAdapter(requireContext(), response.images.items)
-//                rvFilms.adapter = adapter
-//
-//            }
-//            .onFailure { e ->
-//                Log.e("Response", e.message, e)
-//            }
-
-
-//        val titleId = arguments?.getString("f") as String
-//        mService.getTitleList(titleId).enqueue(object : Callback<TitleData> {
-//            override fun onFailure(call: Call<TitleData>, t: Throwable) {
-//            }
-//
-//
-//            override fun onResponse(call: Call<TitleData>, response: Response<TitleData>) {
-//                Log.e("Response", "FullTitle")
-//                val titlesResponse = response.body()
-//                if (titlesResponse != null) {
-//                    actData = titlesResponse
-//                }
-//                if (titlesResponse == null) {
-//                    return
-//                }
-//                pagerAdapter = ViewPagerAdapter(this@FullTitleFragment, actData)
-//                viewPager.adapter = pagerAdapter
-//                TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-//                    tab.text = tabNames[position]
-//                }.attach()
-//
-//                ui(titlesResponse)
-//
-//                adapter = MyTitleAdapter(context!!, titlesResponse.images.items)
-//                adapter.notifyDataSetChanged()
-//                rvFilms.adapter = adapter
-//
-//            }
-//
-//        })
-    }
+}
 
 
 

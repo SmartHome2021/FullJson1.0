@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.fulljson10.R
 
-class ActorsAdapter (val moviList: List<Actor>):
+class ActorsAdapter (private val moviList: List<Actor>):
     RecyclerView.Adapter<ActorsAdapter.MyViewHolder>() {
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){

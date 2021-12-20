@@ -5,6 +5,7 @@ import TitleData
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.SavedStateHandle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.fulljson10.ActorsViewPagerFragment
 import com.example.fulljson10.DescriptionViewPagerFragment
@@ -34,6 +35,7 @@ class ViewPagerAdapter(fragment: Fragment, private val response: TitleData): Fra
             else -> return ActorsViewPagerFragment()
         }
     }
+
 }
 
 

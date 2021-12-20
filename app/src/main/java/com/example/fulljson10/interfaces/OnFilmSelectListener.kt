@@ -1,4 +1,4 @@
-package com.example.fulljson10.adapter
+package com.example.fulljson10.interfaces
 
 import com.example.fulljson10.model.Film
 

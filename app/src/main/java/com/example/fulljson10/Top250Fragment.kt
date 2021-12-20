@@ -16,9 +16,9 @@ import com.example.fulljson10.adapter.MyMovieAdapter
 import com.example.fulljson10.common.Common
 import com.example.fulljson10.model.Film
 import androidx.navigation.fragment.findNavController
-import com.example.fulljson10.adapter.OnFilmSelectListener
+import com.example.fulljson10.interfaces.OnFilmSelectListener
 import com.example.fulljson10.databinding.Top250RecicleBinding
-import com.example.fulljson10.model.Top250ViewModel
+import com.example.fulljson10.viewmodel.Top250ViewModel
 import com.example.fulljson10.retrofit.RetrofitServieces
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
