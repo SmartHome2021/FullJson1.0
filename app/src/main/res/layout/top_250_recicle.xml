@@ -25,11 +25,12 @@
         android:layout_width="23dp"
         android:layout_height="23dp"
         android:layout_margin="5dp"
-        android:scaleType="center"
+        android:background="@null"
+        android:scaleType="centerInside"
         android:visibility="gone"
         android:src="@drawable/_2x32"
-        app:layout_constraintTop_toTopOf="@id/SearchBar250"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/SearchBar250" />
 
     <ProgressBar
         android:id="@+id/progressBar"
