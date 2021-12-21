@@ -2,9 +2,13 @@ package com.example.fulljson10
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -39,6 +43,10 @@ class Top250Fragment : Fragment(), OnFilmSelectListener {
 
     lateinit var progressBar: ProgressBar
 
+    lateinit var searchBar: EditText
+
+    lateinit var clearButton: ImageButton
+
     lateinit var layoutManager: LinearLayoutManager
 
     lateinit var adapter: MyMovieAdapter
@@ -66,6 +74,10 @@ class Top250Fragment : Fragment(), OnFilmSelectListener {
 
         progressBar = view.findViewById(R.id.progressBar)
 
+        searchBar = view.findViewById(R.id.SearchBar250)
+
+        clearButton = view.findViewById(R.id.ClearButton)
+
         rvFilms = view.findViewById(R.id.list)
 
         mService = Common.retrofitService
@@ -75,6 +87,9 @@ class Top250Fragment : Fragment(), OnFilmSelectListener {
         layoutManager = LinearLayoutManager(context)
 
         rvFilms.layoutManager = layoutManager
+
+
+        searchBar.addTextChangedListener(textWatcher)
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel250View.result250.collect {
@@ -104,17 +119,42 @@ class Top250Fragment : Fragment(), OnFilmSelectListener {
             }
         }
 
+        clearButton.setOnClickListener{
+            searchBar.setText("")
+        }
+
 
 
     }
 
+    private val textWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            updateSearch()
+        }
+
+        override fun afterTextChanged(s: Editable?) {}
+
+    }
+
+    private fun updateSearch(){
+        val s = searchBar.text.toString()
+
+        if (s.length == 0) {
+            viewModel250View.clear()
+            clearButton.visibility = View.GONE
+        } else {
+            viewModel250View.search(s)
+            clearButton.visibility = View.VISIBLE
+        }
+    }
+
 
     override fun onSelect(film: Film) {
-
         val bundle = Bundle()
-        bundle.putString ("f", film.id)
+        bundle.putString ("s", film.id)
         findNavController().navigate(R.id.action_Top250Fragment_to_filmFullTitle, bundle)
-//        Toast.makeText(requireContext(), film.fullTitle, Toast.LENGTH_SHORT).show()
 
     }
 }

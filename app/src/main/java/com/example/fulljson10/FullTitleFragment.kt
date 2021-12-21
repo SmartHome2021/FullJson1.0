@@ -83,9 +83,6 @@ class FullTitleFragment : Fragment() {
 
 
 
-//        val titleId = arguments?.getString("f") as String
-
-
         viewLifecycleOwner.lifecycleScope.launch {
             viewModelFullTitle.resultFullTitle.collect {
                 if (it != null) {
@@ -104,7 +101,6 @@ class FullTitleFragment : Fragment() {
                 }
             }
         }
-//        viewModelFullTitle.load(titleId)
     }
 
 
@@ -118,7 +114,6 @@ class FullTitleFragment : Fragment() {
         tvPopular.text = ("Metascore: ${titles.metacriticRating}")
         tvGenre.text = ("Genre: ${titles.genres}")
         tvYear.text = ("Year: ${titles.year}")
-//        tvDescription.text = ("Description:" + "\n" + titles.plot)
         tvDirector.text = ("Director: " + titles.directors)
         tvStars.text = ("Stars: " + titles.stars)
 

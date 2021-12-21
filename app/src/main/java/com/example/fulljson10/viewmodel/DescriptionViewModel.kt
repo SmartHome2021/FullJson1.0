@@ -14,7 +14,7 @@ class DescriptionViewModel(state: SavedStateHandle): ViewModel() {
 
     init {
         resultDescription.value = state.get<TitleData>("t")
-        Log.i("Response", "Description Succes")
+        Log.i("Response1", "Description Succes")
     }
 
 }

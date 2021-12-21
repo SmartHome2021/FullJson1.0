@@ -7,5 +7,6 @@
     <string name="Actors">Hello blank fragment</string>
     <string name="Description">Hello blank fragment</string>
     <string name="itemsCount">Items downloaded: </string>
+    <string name="hintSearch">  🔍</string>
 
 </resources>

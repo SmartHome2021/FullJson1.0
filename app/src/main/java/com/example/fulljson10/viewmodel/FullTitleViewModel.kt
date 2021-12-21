@@ -19,29 +19,16 @@ class FullTitleViewModel(state: SavedStateHandle): ViewModel() {
 
     init{
         viewModelScope.launch {
-            kotlin.runCatching{ withContext(Dispatchers.IO) { state.get<TitleData>("t")?.let { retrofit.getTitleList(it.id) } } }
+            kotlin.runCatching{ withContext(Dispatchers.IO) { state.get<String>("s")?.let { retrofit.getTitleList(it) } }}
                 .onSuccess {
-                    resultFullTitle.value = state.get<TitleData>("t")
-                    Log.i("Response", "Full Title Succes")
+                    resultFullTitle.value = it
+                    Log.i("Response1", "Full Title Succes")
                 }
                 .onFailure { e ->
                     Log.e("Response", e.message, e)
                 }
-
     }
-//fun load(id: String){
-//    viewModelScope.launch {
-//        kotlin.runCatching{ withContext(Dispatchers.IO) {retrofit.getTitleList(id)} }
-//            .onSuccess {
-//                resultFullTitle.value = it
-//                Log.i("Response", "Full Title Succes")
-//            }
-//            .onFailure { e ->
-//                Log.e("Response", e.message, e)
-//            }
-//    }
-//
-//
+
 }
 
 

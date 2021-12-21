@@ -14,7 +14,7 @@ class ActorsViewModel(state: SavedStateHandle): ViewModel() {
 
     init {
         resultActor.value = state.get<TitleData>("t")
-        Log.i("Response", "Actor Succes")
+        Log.i("Response1", "Actor Succes")
     }
 
 

@@ -5,15 +5,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <SearchView
-        android:id="@+id/SearchView"
-        android:layout_width="300dp"
+    <EditText
+        android:id="@+id/SearchBar250"
+        android:layout_width="0dp"
+        android:layout_margin="5dp"
+        android:padding="6dp"
+        android:hint="@string/hintSearch"
+        android:maxLength="50"
+        android:singleLine="true"
+        android:background="@drawable/search_view_stroke"
         android:layout_height="wrap_content"
-        android:layout_margin="2dp"
         app:layout_constraintTop_toBottomOf="@id/TimeCount"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/list"/>
+        app:layout_constraintEnd_toStartOf="@id/ClearButton"
+        app:layout_constraintBottom_toBottomOf="@id/ClearButton"/>
+
+    <ImageButton
+        android:id="@+id/ClearButton"
+        android:layout_width="23dp"
+        android:layout_height="23dp"
+        android:layout_margin="5dp"
+        android:scaleType="center"
+        android:visibility="gone"
+        android:src="@drawable/_2x32"
+        app:layout_constraintTop_toTopOf="@id/SearchBar250"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -46,7 +62,8 @@
         android:text="@string/itemsCount"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/FilmCount250"/>
+        app:layout_constraintEnd_toStartOf="@id/FilmCount250"
+        app:layout_constraintBottom_toTopOf="@id/SearchBar250"/>
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -55,10 +72,10 @@
         android:layout_height="0dp"
         android:layout_margin="8dp"
         app:cardElevation="8dp"
-        app:layout_constraintTop_toBottomOf="@id/SearchView"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/SearchBar250">
 
     </androidx.recyclerview.widget.RecyclerView>
 

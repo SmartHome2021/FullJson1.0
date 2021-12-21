@@ -11,33 +11,45 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 
 
-class Top250ViewModel(private val state: SavedStateHandle): ViewModel() {
+class Top250ViewModel: ViewModel() {
     private var retrofit : RetrofitServieces = Common.retrofitService
 
     var result250 = MutableStateFlow<List<Film>?>(null)
     var itemCount = MutableStateFlow<Int?>(0)
     var timeCount = MutableStateFlow<Long?>(0L)
 
+    var searchArray: List<Film>? = null
 
 
 
 
     init {
         viewModelScope.launch {
-            delay(2000)
+            delay(1000)
             kotlin.runCatching { withContext(Dispatchers.IO) { retrofit.getMovieList() } }
                 .onSuccess {
                     val x = System.currentTimeMillis() //Начало операции
                     result250.value = it.items
+                    searchArray = it.items
                     itemCount.value = result250.value!!.size // Кол-во обьектов
                     val y = System.currentTimeMillis() - x // Конец операции
                     timeCount.value = y
-                    Log.i("Response", "Top250 Succes")
+                    Log.i("Response1", "Top250 Succes")
                 }
                 .onFailure { e ->
                     Log.e("Response", e.message, e)
                 }
         }
+    }
+
+    fun clear(){
+        result250.value = searchArray
+        Log.d("Response1", "Clear Succes")
+    }
+
+    fun search(s: String){
+        val x = searchArray?.filter {it.title.contains(s, ignoreCase = true)}
+        result250.value = x
     }
 
 }

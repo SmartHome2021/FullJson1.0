@@ -14,5 +14,6 @@
     <color name="CardGray">#F3EEE5</color>
     <color name="CardStroke">#D5D0C8</color>
     <color name="FiolLight">#4C8BBD</color>
+    <color name="StrokeBlue">#82A1BA</color>
 
 </resources>
