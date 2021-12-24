@@ -7,12 +7,10 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ProgressBar
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,6 +22,8 @@ import com.example.fulljson10.interfaces.OnFilmSelectListener
 import com.example.fulljson10.databinding.Top250RecicleBinding
 import com.example.fulljson10.viewmodel.Top250ViewModel
 import com.example.fulljson10.retrofit.RetrofitServieces
+//import com.example.fulljson10.room.FavoriteDatabase
+import com.example.fulljson10.room.FavoriteEntity
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import java.util.*
@@ -62,11 +62,17 @@ class Top250Fragment : Fragment(), OnFilmSelectListener {
 
         fragmentFirstBinding = Top250RecicleBinding.inflate(inflater, container, false)
         return binding.root
+
+
+
     }
 
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+
 
         itemCount = view.findViewById(R.id.FilmCount250)
 
@@ -88,14 +94,13 @@ class Top250Fragment : Fragment(), OnFilmSelectListener {
 
         rvFilms.layoutManager = layoutManager
 
-
         searchBar.addTextChangedListener(textWatcher)
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel250View.result250.collect {
                 if (it != null) {
                 progressBar.visibility = View.VISIBLE
-                adapter  = MyMovieAdapter(requireContext(),it, this@Top250Fragment )
+                adapter  = MyMovieAdapter(requireContext(),it, this@Top250Fragment)
                 rvFilms.adapter = adapter
                 progressBar.visibility = View.INVISIBLE
                 }
@@ -124,7 +129,6 @@ class Top250Fragment : Fragment(), OnFilmSelectListener {
         }
 
 
-
     }
 
     private val textWatcher = object : TextWatcher {
@@ -141,7 +145,7 @@ class Top250Fragment : Fragment(), OnFilmSelectListener {
     private fun updateSearch(){
         val s = searchBar.text.toString()
 
-        if (s.length == 0) {
+        if (s.isEmpty()) {
             viewModel250View.clear()
             clearButton.visibility = View.GONE
         } else {
@@ -157,6 +161,13 @@ class Top250Fragment : Fragment(), OnFilmSelectListener {
         findNavController().navigate(R.id.action_Top250Fragment_to_filmFullTitle, bundle)
 
     }
+
+    override fun onLoad(film: Film) {
+        val user = FavoriteEntity(film.id)
+        viewModel250View.addFilm(user)
+    }
+
+
 }
 
 

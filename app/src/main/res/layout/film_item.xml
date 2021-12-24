@@ -80,9 +80,23 @@
             app:layout_constraintVertical_weight="0.5"
             android:textColor="@color/BoldBlack"
             app:layout_constraintStart_toEndOf="@id/filmPoster"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/filmLikeButton"
             app:layout_constraintTop_toBottomOf="@id/filmFullTitle"
             app:layout_constraintBottom_toTopOf="@id/filmRating"/>
+
+        <ImageButton
+            android:id="@+id/filmLikeButton"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_margin="3dp"
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:elevation="5dp"
+            android:src="@drawable/favorite_selector"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/filmYear"
+            app:tint="@color/Favorite" />
 
         <TextView
             android:id="@+id/filmRating"
@@ -93,7 +107,7 @@
             app:layout_constraintVertical_weight="0.5"
             android:textColor="@color/BoldBlack"
             app:layout_constraintStart_toEndOf="@id/filmPoster"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/filmLikeButton"
             app:layout_constraintTop_toBottomOf="@id/filmYear"
             app:layout_constraintBottom_toTopOf="@id/filmCount"
             />
@@ -107,7 +121,7 @@
             app:layout_constraintVertical_weight="0.5"
             android:textColor="@color/BoldBlack"
             app:layout_constraintStart_toEndOf="@id/filmPoster"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/filmLikeButton"
             app:layout_constraintTop_toBottomOf="@id/filmRating"
             app:layout_constraintBottom_toBottomOf="parent"
 
