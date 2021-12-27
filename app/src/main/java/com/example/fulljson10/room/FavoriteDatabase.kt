@@ -9,23 +9,14 @@ abstract class FilmDatabase: RoomDatabase() {
     abstract fun filmDao() : FavoriteDao
 
     companion object{
-        @Volatile
         private var INSTANCE: FilmDatabase? = null
-
-        fun getDatabase(context: Context): FilmDatabase{
-            val tempInstance = INSTANCE
-            if (tempInstance != null){
-                return tempInstance
-            }
-            synchronized(this){
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    FilmDatabase::class.java,
-                    "film_table"
+        fun getInstance(context: Context): FilmDatabase{
+            if (INSTANCE == null){
+                INSTANCE = Room.databaseBuilder(
+                    context, FilmDatabase::class.java, "film_test"
                 ).build()
-                INSTANCE = instance
-                return instance
             }
+            return INSTANCE as FilmDatabase
         }
     }
 }

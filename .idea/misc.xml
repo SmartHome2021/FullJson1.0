@@ -14,6 +14,8 @@
         <entry key="app/src/main/res/drawable/style_border.xml" value="0.371875" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/actors_full_info.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/favorite_card.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/favorite_recicle.xml" value="0.18" />
         <entry key="app/src/main/res/layout/film_item.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_actors_view_pager.xml" value="0.2848731884057971" />
         <entry key="app/src/main/res/layout/fragment_description_view_pager.xml" value="0.33" />
@@ -21,7 +23,7 @@
         <entry key="app/src/main/res/layout/fragment_top250.xml" value="0.25" />
         <entry key="app/src/main/res/layout/title_item.xml" value="0.25" />
         <entry key="app/src/main/res/layout/title_recicle.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/top_250_recicle.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/top_250_recicle.xml" value="0.29239766081871343" />
       </map>
     </option>
   </component>

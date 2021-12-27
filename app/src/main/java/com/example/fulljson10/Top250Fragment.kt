@@ -4,17 +4,17 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.fulljson10.adapter.MyMovieAdapter
+import com.example.fulljson10.adapter.Top250Adapter
 import com.example.fulljson10.common.Common
 import com.example.fulljson10.model.Film
 import androidx.navigation.fragment.findNavController
@@ -24,12 +24,17 @@ import com.example.fulljson10.viewmodel.Top250ViewModel
 import com.example.fulljson10.retrofit.RetrofitServieces
 //import com.example.fulljson10.room.FavoriteDatabase
 import com.example.fulljson10.room.FavoriteEntity
+import com.example.fulljson10.room.FilmDatabase
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import java.util.*
 
 
 class Top250Fragment : Fragment(), OnFilmSelectListener {
+
+    private lateinit var mDb: FilmDatabase
+
     lateinit var itemCount: TextView
 
     lateinit var timeCount: TextView
@@ -49,9 +54,11 @@ class Top250Fragment : Fragment(), OnFilmSelectListener {
 
     lateinit var layoutManager: LinearLayoutManager
 
-    lateinit var adapter: MyMovieAdapter
+    lateinit var adapter: Top250Adapter
 
     lateinit var rvFilms: RecyclerView
+
+    lateinit var favorite: FloatingActionButton
 
     override fun onCreateView(
 
@@ -70,9 +77,7 @@ class Top250Fragment : Fragment(), OnFilmSelectListener {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
-
+        mDb = context?.let { FilmDatabase.getInstance(it)} !!
 
         itemCount = view.findViewById(R.id.FilmCount250)
 
@@ -96,11 +101,17 @@ class Top250Fragment : Fragment(), OnFilmSelectListener {
 
         searchBar.addTextChangedListener(textWatcher)
 
+        favorite = view.findViewById(R.id.FloatingButton)
+
+        favorite.setOnClickListener{
+            findNavController().navigate(R.id.action_Top250Fragment_to_favoriteFragment)
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel250View.result250.collect {
                 if (it != null) {
                 progressBar.visibility = View.VISIBLE
-                adapter  = MyMovieAdapter(requireContext(),it, this@Top250Fragment)
+                adapter  = Top250Adapter(requireContext(),it, this@Top250Fragment)
                 rvFilms.adapter = adapter
                 progressBar.visibility = View.INVISIBLE
                 }
@@ -163,10 +174,22 @@ class Top250Fragment : Fragment(), OnFilmSelectListener {
     }
 
     override fun onLoad(film: Film) {
-        val user = FavoriteEntity(film.id)
-        viewModel250View.addFilm(user)
+        viewLifecycleOwner.lifecycleScope.launch{
+            withContext(Dispatchers.IO){
+                mDb.filmDao().insert(FavoriteEntity(film.id))
+                Log.i("DataInsert", "запись фильма ${film.title} с ID ${film.id} добавлена")
+            }
+        }
     }
 
+    override fun onDelete(film: Film) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            withContext(Dispatchers.IO){
+                mDb.filmDao().delete(FavoriteEntity(film.id))
+                Log.i("DataInsert", "запись фильма ${film.title} с ID ${film.id} удалена")
+            }
+        }
+    }
 
 }
 

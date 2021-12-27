@@ -1,35 +1,26 @@
 package com.example.fulljson10.adapter
 
 import android.content.Context
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import androidx.room.Room
 import com.bumptech.glide.Glide
 import com.example.fulljson10.R
-import com.example.fulljson10.Top250Fragment
 import com.example.fulljson10.interfaces.OnFilmSelectListener
-import com.example.fulljson10.interfaces.OnLoadFilmListener
 import com.example.fulljson10.model.Film
-import com.example.fulljson10.room.FavoriteDao
-import com.example.fulljson10.room.FavoriteEntity
-import com.example.fulljson10.room.FilmDatabase
-import com.example.fulljson10.viewmodel.Top250ViewModel
-import kotlin.coroutines.coroutineContext
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
-class MyMovieAdapter(
+class Top250Adapter(
     private val context: Context,
     private var movieList: List<Film>,
     private val listener: OnFilmSelectListener
 )
-    : RecyclerView.Adapter<MyMovieAdapter.MyViewHolder>() {
+    : RecyclerView.Adapter<Top250Adapter.MyViewHolder>() {
     class MyViewHolder(itemView: View, private val listener: OnFilmSelectListener) :
         RecyclerView.ViewHolder(itemView) {
         val poster: ImageView = itemView.findViewById(R.id.filmPoster)
@@ -48,7 +39,12 @@ class MyMovieAdapter(
                 listener.onSelect(listItem)
             }
             like.setOnClickListener{
-                listener.onLoad(listItem)
+                like.isSelected = like.isSelected.not()
+                if (like.isSelected){
+                    listener.onLoad(listItem)
+                } else {
+                    listener.onDelete(listItem)
+                }
             }
             Glide.with(poster.context).load(listItem.image).into(poster)
             title.text = listItem.title
