@@ -6,4 +6,5 @@ interface OnFilmSelectListener {
     fun onSelect(film: Film)
     fun onLoad(film: Film)
     fun onDelete(film: Film)
+    fun onFavorite(film: Film)
 }

@@ -42,6 +42,7 @@ class Top250Fragment : Fragment(), OnFilmSelectListener {
     private val viewModel250View: Top250ViewModel by viewModels()
 
     private var fragmentFirstBinding: Top250RecicleBinding? = null
+
     private val binding get() = fragmentFirstBinding!!
 
     lateinit var mService: RetrofitServieces
@@ -190,6 +191,18 @@ class Top250Fragment : Fragment(), OnFilmSelectListener {
             }
         }
     }
+
+    override fun onFavorite(film: Film) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            withContext(Dispatchers.IO){
+                val xcv: List<FavoriteEntity> = mDb.filmDao().readAll()
+                viewModel250View.isFavorite(xcv)
+                Log.i("DataInsert", "${xcv.size}")
+
+            }
+        }
+    }
+
 
 }
 

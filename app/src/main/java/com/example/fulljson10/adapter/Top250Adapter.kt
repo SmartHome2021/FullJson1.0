@@ -1,6 +1,7 @@
 package com.example.fulljson10.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,8 +13,10 @@ import com.bumptech.glide.Glide
 import com.example.fulljson10.R
 import com.example.fulljson10.interfaces.OnFilmSelectListener
 import com.example.fulljson10.model.Film
+import com.example.fulljson10.room.FavoriteDao
+import com.example.fulljson10.room.FavoriteEntity
+import com.example.fulljson10.room.FilmDatabase
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-
 
 class Top250Adapter(
     private val context: Context,
@@ -21,16 +24,17 @@ class Top250Adapter(
     private val listener: OnFilmSelectListener
 )
     : RecyclerView.Adapter<Top250Adapter.MyViewHolder>() {
+
     class MyViewHolder(itemView: View, private val listener: OnFilmSelectListener) :
         RecyclerView.ViewHolder(itemView) {
-        val poster: ImageView = itemView.findViewById(R.id.filmPoster)
-        val title: TextView = itemView.findViewById(R.id.filmTitle)
-        val fullTitle: TextView = itemView.findViewById(R.id.filmFullTitle)
-        val rank: TextView = itemView.findViewById(R.id.filmRank)
-        val year: TextView = itemView.findViewById(R.id.filmYear)
-        val rating: TextView = itemView.findViewById(R.id.filmRating)
-        val count: TextView = itemView.findViewById(R.id.filmCount)
-        val like: ImageButton = itemView.findViewById(R.id.filmLikeButton)
+        private val poster: ImageView = itemView.findViewById(R.id.filmPoster)
+        private val title: TextView = itemView.findViewById(R.id.filmTitle)
+        private val fullTitle: TextView = itemView.findViewById(R.id.filmFullTitle)
+        private val rank: TextView = itemView.findViewById(R.id.filmRank)
+        private val year: TextView = itemView.findViewById(R.id.filmYear)
+        private val rating: TextView = itemView.findViewById(R.id.filmRating)
+        private val count: TextView = itemView.findViewById(R.id.filmCount)
+        private val like: ImageButton = itemView.findViewById(R.id.filmLikeButton)
 
 
         fun bind(listItem: Film) {
@@ -38,12 +42,17 @@ class Top250Adapter(
             itemView.setOnClickListener {
                 listener.onSelect(listItem)
             }
+            val isContains: Boolean = listItem.isFavorite
+            if (isContains){
+                like.isSelected = like.isSelected.not()}
+
             like.setOnClickListener{
                 like.isSelected = like.isSelected.not()
-                if (like.isSelected){
-                    listener.onLoad(listItem)
-                } else {
+                if (like.isSelected.not()){
                     listener.onDelete(listItem)
+                }else {
+                    listener.onLoad(listItem)
+                    listener.onFavorite(listItem)
                 }
             }
             Glide.with(poster.context).load(listItem.image).into(poster)
@@ -55,7 +64,11 @@ class Top250Adapter(
                 (rating.context.getString(R.string.Rating) + "  " + listItem.imDbRating.toString())
             count.text =
                 (count.context.getString(R.string.Count) + "  " + listItem.imDbRatingCount.toString())
+
+
+
         }
+
 
 
     }
@@ -66,15 +79,21 @@ class Top250Adapter(
             LayoutInflater.from(parent.context).inflate(R.layout.film_item, parent, false)
         return MyViewHolder(itemView, listener)
 
+
     }
 
     override fun getItemCount() = movieList.size
+
 
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val listItem = movieList[position]
         holder.bind(listItem)
     }
+
+
+
+
 
 
 

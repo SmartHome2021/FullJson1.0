@@ -72,4 +72,8 @@ class FavoriteFragment: Fragment(), OnFilmSelectListener {
         TODO("Not yet implemented")
     }
 
+    override fun onFavorite(film: Film) {
+        TODO("Not yet implemented")
+    }
+
 }

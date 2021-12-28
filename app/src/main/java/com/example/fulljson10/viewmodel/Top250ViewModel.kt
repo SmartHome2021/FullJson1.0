@@ -4,20 +4,23 @@ package com.example.fulljson10.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.fulljson10.Top250Fragment
 import com.example.fulljson10.common.Common
 import com.example.fulljson10.model.Film
 import com.example.fulljson10.retrofit.RetrofitServieces
+import com.example.fulljson10.room.FavoriteEntity
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 
 
 
-class Top250ViewModel: ViewModel(){
+class Top250ViewModel(): ViewModel(){
     private var retrofit : RetrofitServieces = Common.retrofitService
     var result250 = MutableStateFlow<List<Film>?>(null)
     var itemCount = MutableStateFlow<Int?>(0)
     var timeCount = MutableStateFlow<Long?>(0L)
     var searchArray: List<Film>? = null
+    var favoriteArray: Film? = null
 
 
     init {
@@ -51,6 +54,20 @@ class Top250ViewModel: ViewModel(){
         result250.value = x
     }
 
+    fun isFavorite(f: List<FavoriteEntity>){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                var temp = ""
+                f.onEach{ i ->
+                    temp = i.filmId
+                    val isContains = result250.value.toString().contains(temp)
+                    if (isContains){
+                        favoriteArray?.isFavorite = isContains
+                    } else favoriteArray?.isFavorite = false
+                }
+            }
+        }
+    }
 }
 
 

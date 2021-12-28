@@ -11,7 +11,7 @@ interface FavoriteDao {
     suspend fun insert(filmId: FavoriteEntity )
 
     @Query("SELECT * FROM film_table ORDER BY filmId ASC")
-    fun readAll(): LiveData<List<FavoriteEntity>>
+    fun readAll(): List<FavoriteEntity>
 
     @Delete
     suspend fun delete(filmId: FavoriteEntity)
