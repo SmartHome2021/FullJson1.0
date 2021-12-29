@@ -16,6 +16,7 @@ import com.example.fulljson10.model.Film
 import com.example.fulljson10.room.FavoriteDao
 import com.example.fulljson10.room.FavoriteEntity
 import com.example.fulljson10.room.FilmDatabase
+import com.example.fulljson10.viewmodel.Top250ViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class Top250Adapter(
@@ -37,14 +38,18 @@ class Top250Adapter(
         private val like: ImageButton = itemView.findViewById(R.id.filmLikeButton)
 
 
-        fun bind(listItem: Film) {
-
+        fun bind(listItem: Film, favList: List<Film>) {
+            listener.onFavorite(favList)
+//---------------------------------------------------------------------
             itemView.setOnClickListener {
                 listener.onSelect(listItem)
             }
+//---------------------------------------------------------------------
+
             val isContains: Boolean = listItem.isFavorite
             if (isContains){
-                like.isSelected = like.isSelected.not()}
+                like.isSelected = false }
+//---------------------------------------------------------------------
 
             like.setOnClickListener{
                 like.isSelected = like.isSelected.not()
@@ -52,9 +57,9 @@ class Top250Adapter(
                     listener.onDelete(listItem)
                 }else {
                     listener.onLoad(listItem)
-                    listener.onFavorite(listItem)
                 }
             }
+//---------------------------------------------------------------------
             Glide.with(poster.context).load(listItem.image).into(poster)
             title.text = listItem.title
             fullTitle.text = listItem.fullTitle
@@ -88,7 +93,7 @@ class Top250Adapter(
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val listItem = movieList[position]
-        holder.bind(listItem)
+        holder.bind(listItem, movieList)
     }
 
 

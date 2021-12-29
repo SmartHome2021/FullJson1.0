@@ -192,11 +192,11 @@ class Top250Fragment : Fragment(), OnFilmSelectListener {
         }
     }
 
-    override fun onFavorite(film: Film) {
+    override fun onFavorite(film: List<Film>) {
         viewLifecycleOwner.lifecycleScope.launch {
             withContext(Dispatchers.IO){
                 val xcv: List<FavoriteEntity> = mDb.filmDao().readAll()
-                viewModel250View.isFavorite(xcv)
+                viewModel250View.isFavorite(xcv, film)
                 Log.i("DataInsert", "${xcv.size}")
 
             }
