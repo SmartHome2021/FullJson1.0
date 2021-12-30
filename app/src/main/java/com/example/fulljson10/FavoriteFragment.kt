@@ -20,7 +20,7 @@ import com.example.fulljson10.viewmodel.Top250ViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class FavoriteFragment: Fragment(), OnFilmSelectListener {
+class FavoriteFragment : Fragment(), OnFilmSelectListener {
 
     private val favoriteViewModel: FavoriteViewModel by viewModels()
 
@@ -49,8 +49,8 @@ class FavoriteFragment: Fragment(), OnFilmSelectListener {
         rvFavorite.layoutManager = layoutManager
 
         viewLifecycleOwner.lifecycleScope.launch {
-            favoriteViewModel.favorite250.collect{
-                if (it != null){
+            favoriteViewModel.favorite250.collect {
+                if (it != null) {
                     adapter = FavoriteAdapter(it, this@FavoriteFragment)
                     rvFavorite.adapter = adapter
                 }
@@ -72,10 +72,9 @@ class FavoriteFragment: Fragment(), OnFilmSelectListener {
         TODO("Not yet implemented")
     }
 
-    override fun onFavorite(film: List<Film>) {
+    override fun onFavorite(film: Film) {
         TODO("Not yet implemented")
     }
-
 
 
 }

@@ -10,10 +10,10 @@ abstract class FilmDatabase: RoomDatabase() {
 
     companion object{
         private var INSTANCE: FilmDatabase? = null
-        fun getInstance(context: Context): FilmDatabase{
+        fun getInstance(context: Context? = null): FilmDatabase{
             if (INSTANCE == null){
                 INSTANCE = Room.databaseBuilder(
-                    context, FilmDatabase::class.java, "film_test"
+                    context!!, FilmDatabase::class.java, "film_test"
                 ).build()
             }
             return INSTANCE as FilmDatabase

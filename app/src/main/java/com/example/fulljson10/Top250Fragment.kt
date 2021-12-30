@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,8 +21,6 @@ import com.example.fulljson10.interfaces.OnFilmSelectListener
 import com.example.fulljson10.databinding.Top250RecicleBinding
 import com.example.fulljson10.viewmodel.Top250ViewModel
 import com.example.fulljson10.retrofit.RetrofitServieces
-//import com.example.fulljson10.room.FavoriteDatabase
-import com.example.fulljson10.room.FavoriteEntity
 import com.example.fulljson10.room.FilmDatabase
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.*
@@ -72,13 +69,12 @@ class Top250Fragment : Fragment(), OnFilmSelectListener {
         return binding.root
 
 
-
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mDb = context?.let { FilmDatabase.getInstance(it)} !!
+        mDb = context?.let { FilmDatabase.getInstance(it) }!!
 
         itemCount = view.findViewById(R.id.FilmCount250)
 
@@ -104,31 +100,34 @@ class Top250Fragment : Fragment(), OnFilmSelectListener {
 
         favorite = view.findViewById(R.id.FloatingButton)
 
-        favorite.setOnClickListener{
+        favorite.visibility = View.GONE
+
+        favorite.setOnClickListener {
             findNavController().navigate(R.id.action_Top250Fragment_to_favoriteFragment)
         }
+
+        adapter = Top250Adapter(requireContext(), this@Top250Fragment)
+        rvFilms.adapter = adapter
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel250View.result250.collect {
                 if (it != null) {
-                progressBar.visibility = View.VISIBLE
-                adapter  = Top250Adapter(requireContext(),it, this@Top250Fragment)
-                rvFilms.adapter = adapter
-                progressBar.visibility = View.INVISIBLE
+                    adapter.movieList = it
+                    adapter.notifyDataSetChanged()
+                    progressBar.visibility = View.INVISIBLE
                 }
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch{
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel250View.itemCount.collect {
-                if (it != null)
-                {
+                if (it != null) {
                     itemCount.text = "Total Films: $it"
                 }
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch{
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel250View.timeCount.collect {
                 if (it != null) {
                     timeCount.text = "The time has passed: $it ms"
@@ -136,7 +135,7 @@ class Top250Fragment : Fragment(), OnFilmSelectListener {
             }
         }
 
-        clearButton.setOnClickListener{
+        clearButton.setOnClickListener {
             searchBar.setText("")
         }
 
@@ -154,7 +153,7 @@ class Top250Fragment : Fragment(), OnFilmSelectListener {
 
     }
 
-    private fun updateSearch(){
+    private fun updateSearch() {
         val s = searchBar.text.toString()
 
         if (s.isEmpty()) {
@@ -169,38 +168,25 @@ class Top250Fragment : Fragment(), OnFilmSelectListener {
 
     override fun onSelect(film: Film) {
         val bundle = Bundle()
-        bundle.putString ("s", film.id)
+        bundle.putString("s", film.id)
         findNavController().navigate(R.id.action_Top250Fragment_to_filmFullTitle, bundle)
 
     }
 
     override fun onLoad(film: Film) {
-        viewLifecycleOwner.lifecycleScope.launch{
-            withContext(Dispatchers.IO){
-                mDb.filmDao().insert(FavoriteEntity(film.id))
-                Log.i("DataInsert", "запись фильма ${film.title} с ID ${film.id} добавлена")
-            }
-        }
+        viewModel250View.onLoad(film)
+
     }
 
     override fun onDelete(film: Film) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            withContext(Dispatchers.IO){
-                mDb.filmDao().delete(FavoriteEntity(film.id))
-                Log.i("DataInsert", "запись фильма ${film.title} с ID ${film.id} удалена")
-            }
-        }
+        viewModel250View.onDelete(film)
+
     }
 
-    override fun onFavorite(film: List<Film>) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            withContext(Dispatchers.IO){
-                val xcv: List<FavoriteEntity> = mDb.filmDao().readAll()
-                viewModel250View.isFavorite(xcv, film)
-                Log.i("DataInsert", "${xcv.size}")
 
-            }
-        }
+    override fun onFavorite(film: Film) {
+        viewModel250View.onFavorite(film)
+
     }
 
 

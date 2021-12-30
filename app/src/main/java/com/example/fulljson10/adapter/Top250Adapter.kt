@@ -21,10 +21,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class Top250Adapter(
     private val context: Context,
-    private var movieList: List<Film>,
     private val listener: OnFilmSelectListener
-)
-    : RecyclerView.Adapter<Top250Adapter.MyViewHolder>() {
+) : RecyclerView.Adapter<Top250Adapter.MyViewHolder>() {
+    var movieList: List<Film> = emptyList()
 
     class MyViewHolder(itemView: View, private val listener: OnFilmSelectListener) :
         RecyclerView.ViewHolder(itemView) {
@@ -38,26 +37,17 @@ class Top250Adapter(
         private val like: ImageButton = itemView.findViewById(R.id.filmLikeButton)
 
 
-        fun bind(listItem: Film, favList: List<Film>) {
-            listener.onFavorite(favList)
-//---------------------------------------------------------------------
+        fun bind(listItem: Film) {
             itemView.setOnClickListener {
                 listener.onSelect(listItem)
             }
 //---------------------------------------------------------------------
-
-            val isContains: Boolean = listItem.isFavorite
-            if (isContains){
-                like.isSelected = false }
-//---------------------------------------------------------------------
-
-            like.setOnClickListener{
-                like.isSelected = like.isSelected.not()
-                if (like.isSelected.not()){
+            like.isSelected = listItem.isFavorite
+            like.setOnClickListener {
+                listener.onFavorite(listItem)
+                if (like.isSelected){
                     listener.onDelete(listItem)
-                }else {
-                    listener.onLoad(listItem)
-                }
+                } else {listener.onLoad(listItem)}
             }
 //---------------------------------------------------------------------
             Glide.with(poster.context).load(listItem.image).into(poster)
@@ -70,10 +60,7 @@ class Top250Adapter(
             count.text =
                 (count.context.getString(R.string.Count) + "  " + listItem.imDbRatingCount.toString())
 
-
-
         }
-
 
 
     }
@@ -90,17 +77,10 @@ class Top250Adapter(
     override fun getItemCount() = movieList.size
 
 
-
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val listItem = movieList[position]
-        holder.bind(listItem, movieList)
+        holder.bind(listItem)
     }
-
-
-
-
-
-
 
 }
 
